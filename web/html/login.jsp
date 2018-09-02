@@ -28,7 +28,7 @@
                         </header>
 						<div class="container"> 
                             
-                           <form method="post" action="#">
+                           <form method="post" action="login">
 								<div class="row">
 									<div class="col-6 col-12-mobile"><input type="text" name="email" placeholder="Email" /></div>
 									<div class="col-6 col-12-mobile"><input type="password" name="senha" placeholder="Senha" /></div>
@@ -36,6 +36,10 @@
 									<div class="col-12">
 										<input type="submit" value="Entrar" />
 									</div>
+									<em>
+										<%if(request.getAttribute ("error")!=null){%>
+											<%= request.getAttribute("error")%></br>
+										<%}%></em>
 								</div>
 							</form>
 						</div>
