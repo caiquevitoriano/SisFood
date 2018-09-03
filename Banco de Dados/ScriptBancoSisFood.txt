@@ -1,0 +1,131 @@
+CREATE TABLE Usuario(
+ id SERIAL,
+ email VARCHAR(100) PRIMARY KEY,
+ senha VARCHAR(50),
+ nome VARCHAR(100) NOT NULL,
+ sexo VARCHAR(1),
+ foto VARCHAR(100) NOT NULL,
+ fone VARCHAR(25),
+ descricao VARCHAR(100),
+ profissao VARCHAR(50),
+ cidade VARCHAR(50) NOT NULL,
+ estado VARCHAR(50) NOT NULL,
+ CEP VARCHAR(10) NOT NULL,
+ rua VARCHAR(50) NOT NULL,
+ numero INT
+ );
+
+ CREATE TABLE Estabelecimento (
+ id SERIAL PRIMARY KEY,
+ nome VARCHAR(50) NOT NULL,
+ foto VARCHAR(100) NOT NULL,
+ fone VARCHAR(25),
+ tipo VARCHAR(50) NOT NULL,
+ Descricao VARCHAR(100),
+ cidade VARCHAR(50) NOT NULL,
+ estado VARCHAR(50) NOT NULL,
+ CEP VARCHAR(10) NOT NULL,
+ rua VARCHAR(50) NOT NULL,
+ numero INTEGER NOT NULL,
+ dataFuncio DATE,
+ horarioFuncio TIME,
+ emailUser VARCHAR(100),
+
+ FOREIGN KEY(emailUser)REFERENCES Usuario(email)
+);
+
+CREATE TABLE Comida(
+ id SERIAL PRIMARY KEY,
+ nome VARCHAR(50) NOT NULL,
+ descricao VARCHAR(100) NOT NULL,
+ preco REAL NOT NULL
+);
+
+CREATE TABLE Amigo(
+ id SERIAL,
+ estado VARCHAR(10),
+ userRemetente VARCHAR(100),
+ userDestinatario VARCHAR(100),
+ 
+ FOREIGN KEY(UserRemetente)REFERENCES Usuario(email),
+ FOREIGN KEY(UserDestinatario)REFERENCES Usuario(email),
+ PRIMARY KEY(UserRemetente,UserDestinatario)
+);
+
+CREATE TABLE AvaliarComida(
+ id SERIAL,
+ usuario VARCHAR(100),
+ idComida INTEGER,
+ nota REAL,
+ comentario VARCHAR(50),
+
+ FOREIGN KEY(usuario)REFERENCES Usuario(email),
+ FOREIGN KEY(idComida)REFERENCES Comida(id),
+ PRIMARY KEY(usuario,idComida,id)
+);
+
+CREATE TABLE AvaliarEstabelecimento(
+ id SERIAL,
+ usuario VARCHAR(100),
+ idEstabelecimento INT,
+ nota REAL,
+ comentario VARCHAR(50),
+
+ FOREIGN KEY(usuario)REFERENCES Usuario(email),
+ FOREIGN KEY(idEstabelecimento)REFERENCES Estabelecimento(id),
+ PRIMARY KEY(usuario,idEstabelecimento,id)
+);
+
+CREATE TABLE DivulgaEstabelecimento(
+ usuario VARCHAR(100),
+ idEstabelecimento INT,
+ 
+ FOREIGN KEY(usuario)REFERENCES Usuario(email),
+ FOREIGN KEY(idEstabelecimento)REFERENCES Estabelecimento(id),
+ PRIMARY KEY(usuario,idEstabelecimento)
+);
+
+CREATE TABLE MarcaPresenca(
+ usuario VARCHAR(100),
+ idEstabelecimento INT,
+ dataMarcada DATE,
+ hora TIME,
+ 
+ FOREIGN KEY(usuario)REFERENCES Usuario(email),
+ FOREIGN KEY(idEstabelecimento)REFERENCES Estabelecimento(id),
+ PRIMARY KEY(usuario,idEstabelecimento)
+);
+
+CREATE TABLE EstabelecimentoTemComida(
+ idComida INT,
+ idEstabelecimento INT,
+ 
+ FOREIGN KEY(idComida)REFERENCES Comida(id),
+ FOREIGN KEY(idEstabelecimento)REFERENCES Estabelecimento(id),
+ PRIMARY KEY(idComida,idEstabelecimento)
+);
+
+CREATE TABLE IndicaComida( 
+ idComida INT,
+ emailRemetente VARCHAR(100),
+ emailDestinatario VARCHAR(100),
+ idEstabelecimento INT,
+ 
+ FOREIGN KEY(idComida)REFERENCES Comida(id),
+ FOREIGN KEY(idEstabelecimento)REFERENCES Estabelecimento(id),
+ FOREIGN KEY(emailRemetente)REFERENCES Usuario(email),
+ FOREIGN KEY(emailDestinatario)REFERENCES Usuario(email),
+ PRIMARY KEY(idComida, idEstabelecimento, emailRemetente, emailDestinatario)
+);
+
+CREATE TABLE EnviaMensagem( 
+ idMensagem SERIAL,
+ emailDestinatario VARCHAR(100),
+ emailRemetente VARCHAR(100),
+ dataMensagem DATE,
+ hora TIME,
+
+ FOREIGN KEY(emailRemetente)REFERENCES Usuario(email),
+ FOREIGN KEY(emailDestinatario)REFERENCES Usuario(email),
+ PRIMARY KEY(idMensagem,emailRemetente,emailDestinatario)
+);
